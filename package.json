@@ -1,0 +1,11 @@
+{
+  "name": "tapper",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:android": "bubblewrap update --manifest=twa-manifest.json --directory=android --skipVersionUpgrade && cd android && bubblewrap build --manifest=../twa-manifest.json"
+  },
+  "devDependencies": {
+    "@bubblewrap/cli": "1.27.0"
+  }
+}

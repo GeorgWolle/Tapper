@@ -1,0 +1,20 @@
+{
+  "packageId": "io.github.georgwolle.tapper",
+  "host": "georgwolle.github.io",
+  "name": "Tapper",
+  "launcherName": "Tapper",
+  "startUrl": "/Tapper/",
+  "iconUrl": "https://georgwolle.github.io/Tapper/icon.svg",
+  "themeColor": "#020617",
+  "navigationColor": "#020617",
+  "backgroundColor": "#020617",
+  "display": "standalone",
+  "enableNotifications": false,
+  "splashScreenFadeOutDuration": 300,
+  "appVersion": "1",
+  "appVersionCode": 1,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  }
+}
