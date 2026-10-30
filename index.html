@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapper – Tap Tempo</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18"></script>
+  </head>
+  <body class="min-h-dvh bg-slate-950 text-slate-100 antialiased">
+    <main class="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 py-12 text-center">
+      <header>
+        <h1 class="text-4xl font-bold tracking-tight">Tapper</h1>
+        <p class="mt-3 text-slate-400">Tippe im Takt und finde dein Tempo.</p>
+      </header>
+
+      <div role="status" aria-live="polite" aria-atomic="true">
+        <span id="bpm" class="text-7xl font-bold tabular-nums">–</span>
+        <span class="ml-2 text-xl text-slate-400">BPM</span>
+        <p id="hint" class="mt-3 text-sm text-slate-400">Zum Starten zweimal tippen.</p>
+      </div>
+
+      <button
+        id="tap"
+        type="button"
+        class="flex h-64 w-64 touch-manipulation select-none items-center justify-center rounded-full bg-cyan-400 text-3xl font-bold text-slate-950 shadow-lg shadow-cyan-400/20 transition hover:bg-cyan-300 focus-visible:outline-4 focus-visible:outline-offset-8 focus-visible:outline-cyan-200 active:scale-95 motion-reduce:transition-none"
+      >
+        Tap Tempo
+      </button>
+
+      <p class="max-w-sm text-sm leading-relaxed text-slate-400">
+        Klicken oder antippen. Mit fokussiertem Button funktionieren auch Leertaste und Enter.
+        Nach 3 Sekunden Pause beginnt eine neue Messung.
+      </p>
+      <button id="reset" type="button" class="rounded-lg px-4 py-2 text-slate-400 hover:text-white focus-visible:outline-2 focus-visible:outline-cyan-200">
+        Zurücksetzen
+      </button>
+    </main>
+
+    <script>
+      const bpm = document.getElementById("bpm");
+      const hint = document.getElementById("hint");
+      const taps = [];
+      const pause = 3000;
+
+      function reset() {
+        taps.length = 0;
+        bpm.textContent = "–";
+        hint.textContent = "Zum Starten zweimal tippen.";
+      }
+
+      document.getElementById("tap").addEventListener("click", () => {
+        const now = performance.now();
+        if (taps.length && now - taps[taps.length - 1] >= pause) {
+          reset();
+        }
+
+        // Sehr kurze Abstände als versehentliche Doppeltipps ignorieren.
+        if (taps.length && now - taps[taps.length - 1] < 100) {
+          return;
+        }
+
+        taps.push(now);
+        if (taps.length > 9) {
+          taps.shift();
+        }
+
+        if (taps.length < 2) {
+          hint.textContent = "Noch einmal im Takt tippen …";
+          return;
+        }
+
+        const averageInterval = (now - taps[0]) / (taps.length - 1);
+        bpm.textContent = Math.round(60000 / averageInterval);
+        hint.textContent = "Weiter im Takt tippen, um das Tempo zu verfeinern.";
+      });
+
+      document.getElementById("reset").addEventListener("click", reset);
+    </script>
+  </body>
+</html>
